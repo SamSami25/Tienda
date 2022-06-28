@@ -11,6 +11,7 @@ Tienda::Tienda(QWidget *parent)
     // Lista de productos
     cargarProductos();
     // Mostrar los productos en el combo
+    // Lazo de repetición que me permite navegar por los elementos de la lista
     foreach (Producto *p, m_productos){
         ui->inProducto->addItem(p->nombre());
     }
@@ -35,6 +36,7 @@ void Tienda::cargarProductos()
     m_productos.append(new Producto(1, "Leche", 0.80));
     m_productos.append(new Producto(2, "Pan", 0.15));
     m_productos.append(new Producto(3, "Queso", 2.50));
+    m_productos.append(new Producto(4,"Yougurth",0.80));
     // Podría leerse de una base de datos, de un archivo o incluso de Internet
 }
 
@@ -50,6 +52,10 @@ void Tienda::calcular(float stProducto)
     ui->outTotal->setText("$ " + QString::number(total, 'f', 2));
 }
 
+/**
+ * @brief Tienda::on_inProducto_currentIndexChanged Slot que se dispara al cambiar un elemento
+ * @param index Numero del elemento seleccionado en el combo
+ */
 
 void Tienda::on_inProducto_currentIndexChanged(int index)
 {
@@ -64,9 +70,11 @@ void Tienda::on_inProducto_currentIndexChanged(int index)
 
 void Tienda::on_btnAgregar_released()
 {
-    // Validar que no se agregen productos cpn 0 cantidad
+    // Validar que no se agregen productos con cantidad = 0
     int cantidad = ui->inCantidad->value();
     if (cantidad == 0){
+        //Mostrar un Error en la barra de Estado
+        ui->statusbar->showMessage("La cantidad no puede ser 0");
         return;
     }
     // Obtener los datos de la GUI

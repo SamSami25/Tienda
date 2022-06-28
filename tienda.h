@@ -21,7 +21,6 @@ public:
 
 private slots:
     void on_inProducto_currentIndexChanged(int index);
-
     void on_btnAgregar_released();
 
 private:
