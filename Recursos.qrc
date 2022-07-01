@@ -2,5 +2,13 @@
     <qresource prefix="/new/prefix1">
         <file>Recursos/img/Tienda.png</file>
         <file>Recursos/img/Universidad.png</file>
+        <file>Recursos/img/Abrir.png</file>
+        <file>Recursos/img/anadir-al-carrito.png</file>
+        <file>Recursos/img/Calcular.png</file>
+        <file>Recursos/img/factura.png</file>
+        <file>Recursos/img/Guardar.png</file>
+        <file>Recursos/img/Nombre.png</file>
+        <file>Recursos/img/Nuevo.png</file>
+        <file>Recursos/img/salida.png</file>
     </qresource>
 </RCC>

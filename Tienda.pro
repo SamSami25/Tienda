@@ -10,17 +10,20 @@ CONFIG += c++11
 
 SOURCES += \
     acerca.cpp \
+    factura.cpp \
     main.cpp \
     producto.cpp \
     tienda.cpp
 
 HEADERS += \
     acerca.h \
+    factura.h \
     producto.h \
     tienda.h
 
 FORMS += \
     acerca.ui \
+    factura.ui \
     tienda.ui
 
 # Default rules for deployment.

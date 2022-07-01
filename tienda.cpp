@@ -1,11 +1,8 @@
 #include "tienda.h"
 #include "ui_tienda.h"
 #include "ui_acerca.h"
+#include "ui_factura.h"
 
-#include <QDebug>
-#include <QDialog>
-#include <QDir>
-#include <QMessageBox>
 
 Tienda::Tienda(QWidget *parent)
     : QMainWindow(parent)
@@ -38,14 +35,14 @@ Tienda::~Tienda()
 void Tienda::cargarProductos()
 {
     // Crear productos "quemados" en el código
-    // m_productos.append(new Producto(1, "Leche", 0.80));
-    // m_productos.append(new Producto(2, "Pan", 0.15));
-    // m_productos.append(new Producto(3, "Queso", 2.50));
-    // m_productos.append(new Producto(4,"Yougurth",0.80));
+     m_productos.append(new Producto(1, "Leche", 0.80));
+     m_productos.append(new Producto(2, "Pan", 0.15));
+     m_productos.append(new Producto(3, "Queso", 2.50));
+     m_productos.append(new Producto(4,"Yougurth",0.80));
     // Podría leerse de una base de datos, de un archivo o incluso de Internet
     //para obtener el archivo
 
-    QDir actual = QDir::current(); //directorio actual
+    /*QDir actual = QDir::current(); //directorio actual
     // El path al archivo CSV
     QString archivoProductos = actual.absolutePath() + "/debug/Productos.csv";
     QFile archivo(archivoProductos);
@@ -71,7 +68,7 @@ void Tienda::cargarProductos()
         archivo.close();
     }else{
         qDebug()<< "No se pudo abrir el archivo";
-    }
+    }*/
 }
 
 
@@ -153,12 +150,12 @@ void Tienda::on_btnAgregar_released()
 void Tienda::on_actionAcerca_de_triggered()
 {
     // Crear un objeto del cuadro de diálogo
-    // Acerca *dialog = new Acerca(this);
+    // Acerca *informacion = new Acerca(this);
     // Enviar datos a la otra ventana
-    // dialog->setVersion(VERSION);
+    // informacion->setVersion(VERSION);
     // Mostrar la venta en modo MODAL
     // dialog->exec();
-    // Luego de cerrar la ventana, se acceden a los datos de la misma
+    // informacion->exec();
     // qDebug() << dialog->valor();
 
 }
@@ -166,44 +163,71 @@ void Tienda::on_actionAcerca_de_triggered()
 
 void Tienda::on_actionNuevo_triggered()
 {
-        // Limpiar widgets
-        limpiar ();
-        // Limpiar el texto de calculos
-        ui-> outTexto -> borrar ();
-        // Mostrar mensaje de estado
-        ui-> statusbar - > showMessage ( " Nueva hoja de cálculo de salario " , 3000 );
+    //ui->outDetalle->clearContents();
+    while(ui->outDetalle->rowCount() > 0){
+        ui->outDetalle->removeRow(0);
+    }
 }
 
 void Tienda::on_actionAbrir_triggered()
 {
-
+    QFile arch;
+    QTextStream io;
+    QString nombreArch;
+    nombreArch = QFileDialog::getOpenFileName(this, "Abrir");
+    arch.setFileName(nombreArch);
+    arch.open(QIODevice::ReadOnly | QIODevice::Text);
+    if(!arch.isOpen()){
+        QMessageBox::critical(this, "Error !!!", arch.errorString());
+        return;
+    }
+    io.setDevice(&arch);
+    // ui->outDetalle(io.readAll());
+    arch.flush();
+    arch.close();
 }
 
 void Tienda::on_actionGuardar_triggered()
 {
     // Abrir un cuadro de diálogo para seleccionar la ruta y archivar a guardar
-      QString nombreArchivo = QFileDialog::getSaveFileName ( this , " Guardar factura " , QDir::home () . absolutePath () + " /factura.csv " , " Archivos de calculo (*.csv) " );
-      QFile archivo (nombreArchivo);
-      if (archivo. open (QFile::WriteOnly | QFile::Truncate)){
-          // Crear un objeto "stream" de texto
-          QTextStream salida (&archivo);
-          // Enviar los datos del resultado a la salida
-          salida << ui-> outDetalle ->;
-          // Mostrar mensaje en la barra de estados
-          ui-> barra de estado -> mostrar Mensaje ( " Datos guardados en: " + nombreArchivo, 5000 );
-          // Crear el archivo
-          archivo. cerrar ();
-      } más {
-          // mensaje de error
-          QMessageBox::warning ( this , " Guardar archivo " , " Nose puede acceder al archivo para guardar los datos " );
-      }
-  }
-
+    QString nombreArchivo = QFileDialog::getSaveFileName ( this , " Guardar Factura de Compra " ,
+                                                           QDir::home().absolutePath() + " /factura.csv " ,
+                                                           " Archivos de calculo (*.csv)" );
+    // Crear un objeto File o un Archivo
+    QFile archivo (nombreArchivo);
+    if (archivo. open (QFile::WriteOnly | QFile::Truncate)){
+        // Crear un objeto "stream" de texto
+        QTextStream salida (&archivo);
+        // Enviar los datos del resultado a la salida
+        salida << ui->outDetalle;
+        // Mostrar mensaje en la barra de estados
+        ui->statusbar->showMessage("Datos guardados en: " + nombreArchivo, 5000);
+        // Crear el archivo
+        archivo.close();
+    } else {
+        // Mensaje de error
+        QMessageBox::warning(this ,
+                             " Guardar archivo " ,
+                             " Nose puede acceder al archivo para guardar los datos " );
+    }
+}
 
 void Tienda::on_actionSalir_triggered()
 {
     salir();
 }
 
-
+void Tienda::on_pushButton_clicked()
+{
+    if(ui->inCedula->displayText().isEmpty()){
+        QMessageBox::warning(this, "Advertencia", "El campo de la cedula esta vacia");
+        return;
+    }else if(ui->inEmail->displayText().isEmpty()){
+        QMessageBox::warning(this, "Advertencia", "El campo del E-mail esta vacio");
+        return;
+    }else if(ui->inNombre->displayText().isEmpty()){
+        QMessageBox::warning(this, "Advertencia", "El campo del nombre esta vacio");
+        return;
+    }
+}
 

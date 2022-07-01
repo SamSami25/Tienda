@@ -1,25 +1,22 @@
 #ifndef FACTURA_H
 #define FACTURA_H
 
-#include <QString>
+#include <QDialog>
 
-class Factura
+namespace Ui {
+class Factura;
+}
+
+class Factura : public QDialog
 {
-
-private:
-
-    QString cedula;
-    QString nombre;
+    Q_OBJECT
 
 public:
+    explicit Factura(QWidget *parent = nullptr);
+    ~Factura();
 
-    Factura(QString cedula,QString nombre);
-    QString getCedula();
-    QString getNombre();
-    void setCedula(QString cedula);
-    void setNombre(QString nombre);
-
-
+private:
+    Ui::Factura *ui;
 };
 
 #endif // FACTURA_H
