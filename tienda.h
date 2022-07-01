@@ -4,6 +4,11 @@
 #include <QMainWindow>
 
 #include "producto.h"
+#include "ui_acerca.h"
+
+#include <QDebug>
+#include <QDialog>
+#include <QDir>
 
 #define IVA 12
 
@@ -22,14 +27,26 @@ public:
 private slots:
     void on_inProducto_currentIndexChanged(int index);
     void on_btnAgregar_released();
+    void on_actionAcerca_de_triggered();
+
+    void on_actionNuevo_triggered();
+
+    void on_actionGuardar_triggered();
+
+    void on_actionSalir_triggered();
+
+    void on_actionAbrir_triggered();
+
+    void on_btnAgregar_clicked();
 
 private:
     Ui::Tienda *ui;
     QList<Producto*> m_productos;
     void cargarProductos();
     float m_subtotal;
-
     void calcular(float stProducto);
+    void salir();
+    bool m_porGuardar;
 
 };
 #endif // TIENDA_H
